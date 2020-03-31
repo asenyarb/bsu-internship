@@ -161,7 +161,7 @@ const config = [
     }
 ];
 
-const newPosts = window.posts.getPage(0, 10, config);
+console.log(`Posts with config `, config, ':', window.posts.getPage(0, 10, config));
 
 const config2 = [
     {
@@ -170,11 +170,11 @@ const config2 = [
     }
 ];
 
-const newPosts2 = window.posts.getPage(0, 10, config2);
+console.log(`Posts with config `, config2, ':', window.posts.getPage(0, 10, config2));
 
-// const addInvalidPostResult = addPost({});
+console.log('Add invalid post result = ', window.posts.add({}));
 
-const addValidPostResult = window.posts.add(
+console.log('Add valid post result = ', window.posts.add(
     {
         id: '45',
         userPhoto: "photos/comp.jpg",
@@ -186,16 +186,17 @@ const addValidPostResult = window.posts.add(
         postTags: ["#ASD"],
         postLikes: ["@asenyarb", "@milky_way"]
     }
-)
+));
 
-const postsWithAddedPost = window.posts.getPage();
+console.log('This added post:', window.posts.get('45'));
 
+console.log('Posts with added post: ', window.posts.getPage(0, 11));
+
+console.log("Editing post with id=45. New fields values: ", { postLikes: ["@asenyarb"], postText: "asdasdadadadasdadas" });
 window.posts.edit('45', { postLikes: ["@asenyarb"], postText: "asdasdadadadasdadas" });
 
-const postsWithEditedAddedPost = window.posts.getPage();
+console.log('Posts with that post edited: ', window.posts.getPage(0, 11));
 
-const editedNewPost = window.posts.get('45');
+console.log('This edited post:', window.posts.get('45'));
 
-const removedPost = window.posts.remove('10');
-
-debugger;
+console.log("Remove post with id=10. This post: ", window.posts.remove('10'));

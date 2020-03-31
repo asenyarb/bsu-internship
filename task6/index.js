@@ -161,7 +161,7 @@ const config = [
     }
 ];
 
-const newPosts = window.api.getPosts(0, 10, config);
+console.log('Getting posts with config', config, ':', window.api.getPosts(0, 10, config));
 
 const config2 = [
     {
@@ -170,11 +170,11 @@ const config2 = [
     }
 ];
 
-const newPosts2 = window.api.getPosts(0, 10, config2);
+console.log('Getting posts with config', config2, ':', window.api.getPosts(0, 10, config2));
 
-// const addInvalidPostResult = addPost({});
+console.log('Add invalid post result = ', window.api.addPost({}));
 
-const addValidPostResult = window.api.addPost(
+console.log('Add valid post result = ', window.api.addPost(
     {
         id: '45',
         userPhoto: "photos/comp.jpg",
@@ -186,16 +186,17 @@ const addValidPostResult = window.api.addPost(
         postTags: ["#ASD"],
         postLikes: ["@asenyarb", "@milky_way"]
     }
-)
+));
 
-const postsWithAddedPost = window.api.getPosts();
+console.log('Added post:', window.api.getPost('45'));
 
+console.log('Posts with added post:', window.api.getPosts(0, 11));
+
+console.log("Editing post id=45 with fields:", { postLikes: ["@asenyarb"], postText: "asdasdadadadasdadas" });
 window.api.editPost('45', { postLikes: ["@asenyarb"], postText: "asdasdadadadasdadas" });
 
-const postsWithEditedAddedPost = window.api.getPosts();
+console.log("Edited post: ", window.api.getPost('45'));
 
-const editedNewPost = window.api.getPost('45');
+console.log('Posts with this edited post: ', window.api.getPosts(0, 11));
 
-const removedPost = window.api.removePost('10');
-
-debugger;
+console.log("Removed posts with id=10: ", window.api.removePost('10'));

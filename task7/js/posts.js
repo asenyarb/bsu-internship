@@ -83,7 +83,6 @@ class PostCollection {
     }
 
     add(post) {
-        debugger;
         if (PostCollection.validate(post)) {
             this._posts.push(post);
             return true;
@@ -112,10 +111,12 @@ class PostCollection {
         const fieldsToChange = Object.keys(newPostFields);
         const readOnlyFields = ['id', 'userName', 'date'];
         fieldsToChange.forEach(field => {
-            if (readOnlyFields.findIndex(field) == -1 || oldPost[field] == newPostFields[field])
+            if (readOnlyFields.indexOf(field) == -1 || oldPost[field] == newPostFields[field]) {
                 oldPost[field] = newPostFields[field];
-            else
+            }
+            else {
                 throw Error(`You cannot edit field ${field} of existing post!!!`);
+            }
         });
         if (PostCollection.validate(oldPost, false)) {
             this._posts[this._posts.findIndex(post => { return post.id == id })] = oldPost;

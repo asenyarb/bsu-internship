@@ -12,6 +12,10 @@
     <servlet-name>tweets</servlet-name>
     <servlet-class>Servlets.TweetListServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>indexPage</servlet-name>
+    <jsp-file>/index.html</jsp-file>
+  </servlet>
   
   <servlet-mapping>
     <servlet-name>tweet</servlet-name>
@@ -21,12 +25,32 @@
     <servlet-name>tweets</servlet-name>
     <url-pattern>/tweets/</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>indexPage</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.css</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.js</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.jpg</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.png</url-pattern>
+  </servlet-mapping>
 
   <filter>
     <filter-name>ServerFilter</filter-name>
     <filter-class>Servlets.FilterServlet</filter-class>
   </filter>
-
   <filter-mapping>
     <filter-name>ServerFilter</filter-name>
     <url-pattern>/*</url-pattern>

@@ -5,3 +5,7 @@
 .idea/
 
 out/
+
+target/
+
+*.class

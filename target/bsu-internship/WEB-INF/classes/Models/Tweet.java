@@ -52,7 +52,11 @@ public class Tweet extends BaseModel implements Cloneable{
     public Boolean matches(Map<String, Object> config) throws NoSuchFieldException, IllegalAccessException {
         try {
             Map<String, Object> newConfig = handleUserFields(config);
-            return super.matches(newConfig);
+            try {
+                return super.matches(newConfig);
+            } catch (ClassNotFoundException e){
+                return false;
+            }
         } catch (MultipleObjectsReturned | DoesNotExist e){
             return false;
         }

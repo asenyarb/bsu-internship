@@ -52,7 +52,7 @@ public class Manager<T extends BaseModel> {
                 obj -> {
                     try {
                         return obj.matches(config);
-                    } catch (NoSuchFieldException | IllegalAccessException e) {
+                    } catch (NoSuchFieldException | IllegalAccessException | ClassNotFoundException e) {
                         if (Settings.DEBUG) {
                             e.printStackTrace();
                         }

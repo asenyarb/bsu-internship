@@ -3,6 +3,7 @@ package Servlets;
 import Models.Tweet;
 import Serializers.TweetListSerializer;
 import org.apache.commons.io.IOUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServlet;
@@ -14,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 
 public class TweetListServlet extends HttpServlet {
@@ -25,7 +27,7 @@ public class TweetListServlet extends HttpServlet {
 
         List<Tweet> tweetList = Tweet.objects.all();
 
-        List<Tweet> paginated_tweets = tweetList.subList(paginate_from, paginate_to);
+        List<Tweet> paginated_tweets = paginate_tweets(paginate_from, paginate_to, tweetList);
 
         makeResponse(response, paginated_tweets);
     }
@@ -33,8 +35,13 @@ public class TweetListServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String configStr = IOUtils.toString(request.getInputStream(), StandardCharsets.UTF_8);
-
-        JSONObject obj = new JSONObject(configStr);
+        JSONObject obj;
+        try {
+            obj = new JSONObject(configStr);
+        } catch (JSONException e){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
         Map<String, Object> config = obj.toMap();
 
         List<Integer> pagination_indexes = get_pagination_indexes(request);
@@ -42,35 +49,48 @@ public class TweetListServlet extends HttpServlet {
         int paginate_to = pagination_indexes.get(1);
 
         List<Tweet> tweetList = Tweet.objects.filter(config);
-
-        List<Tweet> paginated_tweets = tweetList.subList(paginate_from, paginate_to);
-
+        List<Tweet> paginated_tweets = paginate_tweets(paginate_from, paginate_to, tweetList);
         makeResponse(response, paginated_tweets);
     }
 
     List<Integer> get_pagination_indexes(HttpServletRequest request){
-        String paginate_from_str = request.getParameter("paginate_from");
-        String paginate_to_str = request.getParameter("paginate_step");
-
         int paginate_from;
         int paginate_to;
-        if (paginate_from_str.isEmpty()){
-            paginate_from = 0;
-        } else {
+
+        try {
+            String paginate_from_str = request.getParameter("paginate_from");
             paginate_from = Integer.parseInt(paginate_from_str);
+        } catch (NumberFormatException | NoSuchElementException e){
+            paginate_from = 0;
         }
 
-        if (paginate_to_str.isEmpty()){
-            paginate_to = paginate_from + 10;
-        } else {
+        try {
+            String paginate_to_str = request.getParameter("paginate_step");
             paginate_to = Integer.parseInt(paginate_to_str);
+        } catch (NumberFormatException | NoSuchElementException e){
+            paginate_to = paginate_from + 10;
         }
 
+        int finalPaginate_from = paginate_from;
+        int finalPaginate_to = paginate_to;
         return new ArrayList<Integer>(){{
-            add(paginate_from);
-            add(paginate_to);
+            add(finalPaginate_from);
+            add(finalPaginate_to);
         }};
     }
+
+    List<Tweet> paginate_tweets(int paginate_from, int paginate_to, List<Tweet> tweetList){
+        List<Tweet> paginated_tweets;
+        if (paginate_from >= tweetList.size()){
+            paginated_tweets = new ArrayList<>();
+        } else if (paginate_to > tweetList.size()){
+            paginated_tweets = tweetList.subList(paginate_from, tweetList.size());
+        } else {
+            paginated_tweets = tweetList.subList(paginate_from, paginate_to);
+        }
+        return paginated_tweets;
+    }
+
 
     void makeResponse(HttpServletResponse response, List<Tweet> paginated_tweets) throws IOException {
         response.setStatus(HttpServletResponse.SC_OK);

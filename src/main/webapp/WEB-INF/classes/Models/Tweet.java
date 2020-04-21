@@ -2,10 +2,13 @@ package Models;
 
 import Exceptions.DoesNotExist;
 import Exceptions.MultipleObjectsReturned;
+import Exceptions.ParseException;
 import Managers.TweetManager;
+import Serializers.Serializer;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,12 +28,58 @@ public class Tweet extends BaseModel implements Cloneable{
         super(lastId);
         lastId += 1;
         this.createdAt = LocalDateTime.now();
+
+        this.text = "";
+        this.photos = new ArrayList<>();
+        this.tags = new ArrayList<>();
+        this.likes = new ArrayList<>();
+        this.user = null;
     }
 
-    public Tweet(Map<String, Object> rawUser){
+    public Tweet(Long id){
+        super(id);
+        this.createdAt = null;
+
+        this.text = "";
+        this.photos = new ArrayList<>();
+        this.tags = new ArrayList<>();
+        this.likes = new ArrayList<>();
+        this.user = null;
+
+    }
+
+    public Tweet(Map<String, Object> rawUser) throws NoSuchFieldException, ClassNotFoundException, ParseException {
         super(lastId);
         lastId += 1;
-        this.createdAt = (LocalDateTime) rawUser.get("createdAt");
+        if (!rawUser.containsKey("createdAt")){
+            this.createdAt = LocalDateTime.now();
+        } else {
+            this.createdAt = (LocalDateTime) Serializer.parseValue(
+                    getClass().getField("createdAt"), rawUser.get("createdAt")
+            );
+        }
+        this.text = (String) rawUser.get("text");
+        this.photos = (List<String>) rawUser.get("photos");
+        this.tags = (List<String>) rawUser.get("tags");
+        this.likes = (List<String>) rawUser.get("likes");
+        this.user = (User) Serializer.parseValue(
+                getClass().getField("user"),
+                rawUser.get("user")
+        );
+    }
+
+    public Tweet(Long id, Map<String, Object> rawUser){
+        super(id);
+        if (!rawUser.containsKey("createdAt")){
+            this.createdAt = LocalDateTime.now();
+        }
+        try{
+            this.createdAt = (LocalDateTime) Serializer.parseValue(
+                    getClass().getField("createdAt"), rawUser.get("createdAt")
+            );
+        } catch (Exception e){
+            this.createdAt = null;
+        }
         this.text = (String) rawUser.get("text");
         this.photos = (List<String>) rawUser.get("photos");
         this.tags = (List<String>) rawUser.get("tags");

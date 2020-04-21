@@ -12,6 +12,19 @@ public class User extends BaseModel {
     public String name;
     public String photoPath;
 
+    public User(){
+        super(lastId);
+        lastId += 1;
+        this.name = "";
+        this.photoPath = "";
+    }
+
+    public User(Long id){
+        super(id);
+        this.name = "";
+        this.photoPath = "";
+    }
+
     public User(String name, String photoPath){
         super(lastId);
         lastId += 1;
@@ -22,6 +35,12 @@ public class User extends BaseModel {
     public User(Map<String, Object> rawUser){
         super(lastId);
         lastId += 1;
+        this.name = (String) rawUser.get("name");
+        this.photoPath = (String) rawUser.get("photoPath");
+    }
+
+    public User(Long id, Map<String, Object> rawUser){
+        super(id);
         this.name = (String) rawUser.get("name");
         this.photoPath = (String) rawUser.get("photoPath");
     }

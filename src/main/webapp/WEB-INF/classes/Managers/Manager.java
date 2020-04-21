@@ -1,8 +1,11 @@
 package Managers;
 
+import Exceptions.CreateObjectException;
 import Exceptions.DoesNotExist;
 import Exceptions.MultipleObjectsReturned;
+import Exceptions.ParseException;
 import Models.BaseModel;
+import Serializers.Serializer;
 import Settings.Settings;
 
 import java.lang.reflect.Field;
@@ -68,21 +71,36 @@ public class Manager<T extends BaseModel> {
         return collection;
     }
 
-    public T create(Map<String, Object> rawObj){
+    public T create(Map<String, Object> rawObj) throws NoSuchFieldException, ClassNotFoundException, ParseException {
         T instance = (T)factory.create(rawObj);
         collection.add(instance);
         return instance;
     }
 
-    public T update(Long id, Map<String, Object> config) throws NoSuchFieldException, ClassCastException, IllegalAccessException, DoesNotExist {
+    public T update(Long id, Map<String, Object> config) throws NoSuchFieldException, ClassCastException, IllegalAccessException, DoesNotExist, CreateObjectException {
         int objectIndex = getObjectIndexById(id);
-        T object = collection.get(objectIndex);
         Set<String> configKeys = config.keySet();
-        for (String key: configKeys){
-            Field objectField = object.getClass().getField(key);
-            objectField.set(this, objectField.getType().cast(config.get(key)));
+        T objectToUpdate = collection.get(objectIndex);
+        // Field.set throws IllegalArgumentException so making workaround
+        Map<String, Object> newObjectConfig = new HashMap<>();
+
+        for (Field objectField: objectToUpdate.getClass().getFields()){
+            if (configKeys.contains(objectField.getName())){
+                Object valueFromConfig = config.get(objectField.getName());
+                newObjectConfig.put(objectField.getName(), valueFromConfig);
+            } else {
+                Object oldObjectValue = objectField.get(objectToUpdate);
+                newObjectConfig.put(objectField.getName(), oldObjectValue);
+            }
         }
-        return this.replaceInCollection(object.id, object);
+        T newObject;
+        try {
+            newObject = (T) factory.create(objectToUpdate.id, newObjectConfig);
+        } catch (Exception e){
+            throw new CreateObjectException("Couldn't create update object using provided data");
+        }
+
+        return this.replaceInCollection(objectToUpdate.id, newObject);
     }
 
     public T replaceInCollection(Long id, T object) throws DoesNotExist {

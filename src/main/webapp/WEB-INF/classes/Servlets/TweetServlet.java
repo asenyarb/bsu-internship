@@ -1,5 +1,6 @@
 package Servlets;
 
+import Exceptions.CreateObjectException;
 import Exceptions.DoesNotExist;
 import Exceptions.MultipleObjectsReturned;
 import Models.Tweet;
@@ -96,7 +97,7 @@ public class TweetServlet extends HttpServlet {
         } catch (DoesNotExist e){
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
-        } catch (IllegalAccessException | NoSuchFieldException e){
+        } catch (IllegalAccessException | NoSuchFieldException | CreateObjectException e){
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }

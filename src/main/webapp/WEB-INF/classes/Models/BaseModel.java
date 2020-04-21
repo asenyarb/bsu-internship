@@ -1,5 +1,8 @@
 package Models;
 
+import Exceptions.ParseException;
+import Serializers.Serializer;
+
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -69,9 +72,9 @@ public class BaseModel {
                         ((String)(((Map<String, Object>) fieldInConfigValue).get("comparison"))).equals("later")
                 ){
                     LocalDateTime fieldDate = (LocalDateTime)field.get(this);
-                    LocalDateTime dateInConfig = LocalDateTime.parse(
-                            (String)(((Map<String, Object>) fieldInConfigValue).get("value")),
-                            formatter
+                    LocalDateTime dateInConfig = (LocalDateTime)Serializer.parseValue(
+                            field,
+                            (String)(((Map<String, Object>) fieldInConfigValue).get("value"))
                     );
                     if (!fieldDate.isAfter(dateInConfig)){
                         return false;
@@ -85,9 +88,9 @@ public class BaseModel {
                         ((String)(((Map<String, Object>) fieldInConfigValue).get("comparison"))).equals("before")
                 ){
                     LocalDateTime fieldDate = (LocalDateTime)field.get(this);
-                    LocalDateTime dateInconfig = LocalDateTime.parse(
-                            (String)(((Map<String, Object>) fieldInConfigValue).get("value")),
-                            formatter
+                    LocalDateTime dateInconfig = (LocalDateTime) Serializer.parseValue(
+                            field,
+                            (String)(((Map<String, Object>) fieldInConfigValue).get("value"))
                     );
                     if (!fieldDate.isBefore(dateInconfig)){
                         return false;
@@ -134,9 +137,9 @@ public class BaseModel {
                 // Simply compare Dates
                 if (isDate){
                     LocalDateTime fieldDate = (LocalDateTime)field.get(this);
-                    LocalDateTime dateInconfig = LocalDateTime.parse(
-                            (String)(((Map<String, Object>) fieldInConfigValue).get("value")),
-                            formatter
+                    LocalDateTime dateInconfig = (LocalDateTime) Serializer.parseValue(
+                            field,
+                            (String)(((Map<String, Object>) fieldInConfigValue).get("value"))
                     );
                     if (!(fieldDate).isEqual(dateInconfig)){
                         return false;
@@ -150,7 +153,7 @@ public class BaseModel {
                     return false;
                 }
             }
-        } catch (ClassCastException e){
+        } catch (ClassCastException | ParseException e){
             return false;
         }
 

@@ -1,7 +1,6 @@
 package ObjectFactory;
 
 import Exceptions.ParseException;
-import Models.User;
 
 import java.util.Map;
 

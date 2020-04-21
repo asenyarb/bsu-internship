@@ -5,11 +5,9 @@ import Exceptions.MultipleObjectsReturned;
 import Exceptions.ParseException;
 import Managers.TweetManager;
 import Serializers.Serializer;
-import org.omg.CosNaming.NamingContextPackage.NotFound;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +25,7 @@ public class Tweet extends BaseModel implements Cloneable{
     public Tweet() {
         super(lastId);
         lastId += 1;
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now().withNano(0);
 
         this.text = "";
         this.photos = new ArrayList<>();
@@ -52,7 +50,7 @@ public class Tweet extends BaseModel implements Cloneable{
         super(lastId);
         lastId += 1;
         if (!rawUser.containsKey("createdAt")){
-            this.createdAt = LocalDateTime.now();
+            this.createdAt = LocalDateTime.now().withNano(0);
         } else {
             this.createdAt = (LocalDateTime) Serializer.parseValue(
                     getClass().getField("createdAt"), rawUser.get("createdAt")
@@ -71,7 +69,7 @@ public class Tweet extends BaseModel implements Cloneable{
     public Tweet(Long id, Map<String, Object> rawUser){
         super(id);
         if (!rawUser.containsKey("createdAt")){
-            this.createdAt = LocalDateTime.now();
+            this.createdAt = LocalDateTime.now().withNano(0);
         }
         try{
             this.createdAt = (LocalDateTime) Serializer.parseValue(
@@ -95,7 +93,7 @@ public class Tweet extends BaseModel implements Cloneable{
         this.tags = tags;
         this.likes = likes;
         this.user = user;
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now().withNano(0);
     }
 
     public Boolean matches(Map<String, Object> config) throws NoSuchFieldException, IllegalAccessException {

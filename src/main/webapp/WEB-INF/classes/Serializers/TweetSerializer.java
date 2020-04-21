@@ -18,7 +18,7 @@ public class TweetSerializer extends Serializer{
 
         fieldsMap.put("user", new UserSerializer(this.tweet.user).data());
 
-        fieldsMap.put("createdAt", this.tweet.createdAt.format(DateTimeFormatter.ofPattern("HH:mm, dd MMM yyyy")));
+        fieldsMap.put("createdAt", this.tweet.createdAt.format(DateTimeFormatter.ofPattern("HH:mm:ss, dd MMM yyyy")));
         fieldsMap.put("text", this.tweet.text);
         fieldsMap.put("photos", this.tweet.photos.toString());
         fieldsMap.put("tags", this.tweet.tags.toString());

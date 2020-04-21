@@ -5,7 +5,6 @@ import org.json.JSONObject;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.SortedMap;
 
 public class TweetListSerializer extends ListSerializer{
     List<Tweet> tweets;

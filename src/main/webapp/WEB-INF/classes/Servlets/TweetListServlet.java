@@ -1,9 +1,7 @@
 package Servlets;
 
-import Exceptions.ParseException;
 import Models.Tweet;
 import Serializers.TweetListSerializer;
-import Serializers.TweetSerializer;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,7 +9,6 @@ import org.json.JSONObject;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -52,19 +49,12 @@ public class TweetListServlet extends HttpServlet {
         }
         Map<String, Object> config = obj.toMap();
 
-        Tweet createdTweet;
-        try {
-            createdTweet = Tweet.objects.create(config);
-        } catch (NoSuchFieldException | ClassNotFoundException | ParseException e) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
-        response.setStatus(HttpServletResponse.SC_CREATED);
-        response.setContentType("application/json");
-
-        JSONObject serializedTweet = new TweetSerializer(createdTweet).data();
-
-        response.getOutputStream().print(serializedTweet.toString());
+        List<Integer> pagination_indexes = get_pagination_indexes(request);
+        int paginate_from = pagination_indexes.get(0);
+        int paginate_to = pagination_indexes.get(1);
+        List<Tweet> tweetList = Tweet.objects.filter(config);
+        List<Tweet> paginated_tweets = paginate_tweets(paginate_from, paginate_to, tweetList);
+        makeResponse(response, paginated_tweets);
     }
 
     List<Integer> get_pagination_indexes(HttpServletRequest request){
@@ -103,5 +93,15 @@ public class TweetListServlet extends HttpServlet {
             paginated_tweets = tweetList.subList(paginate_from, paginate_to);
         }
         return paginated_tweets;
+    }
+
+    void makeResponse(HttpServletResponse response, List<Tweet> paginated_tweets) throws IOException {
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/json");
+
+        List<JSONObject> tweets = new TweetListSerializer(paginated_tweets).data();
+        String data = tweets.toString();
+
+        response.getOutputStream().print(data);
     }
 }

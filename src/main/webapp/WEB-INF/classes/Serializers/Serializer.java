@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -38,8 +39,12 @@ public abstract class Serializer {
                 !valueClass.equals(Class.forName("java.time.LocalDateTime"))
         ){
             // Date in config is represented as String
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm, dd MMM yyyy");
-            return LocalDateTime.parse((String)value, formatter);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss, dd MMM yyyy");
+            try {
+                return LocalDateTime.parse((String) value, formatter);
+            } catch (DateTimeParseException e){
+                throw new ParseException("Could not parse date value from provided data");
+            }
         }
         if (field.getType().equals(Class.forName("Models.User"))){
             Object id;

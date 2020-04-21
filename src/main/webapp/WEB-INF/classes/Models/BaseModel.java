@@ -25,12 +25,30 @@ public class BaseModel {
                 Field field = this.getClass().getField(fieldInConfig);
                 Object fieldInConfigValue = config.get(fieldInConfig);
 
+                boolean withComparison = fieldInConfigValue instanceof Map &&
+                        ((Map<String, String>) fieldInConfigValue).containsKey("comparison");
+
+                //-------------------------------------------------------------------
+                if (field.getType().equals(Class.forName("Models.User"))){
+                    User user = (User)field.get(this);
+                    boolean matches;
+                    if (fieldInConfigValue instanceof Map) {
+                        Map<String, Object> userConfig = (Map<String, Object>) fieldInConfigValue;
+                        matches = user.matches(userConfig);
+                    } else {
+                        matches = user.id.equals(Long.parseLong(fieldInConfigValue.toString()));
+                    }
+                    if (matches){
+                        continue;
+                    } else {
+                        return false;
+                    }
+                }
 
                 //-------------------------------------------------------------------
 
                 boolean arrayWithComparisonKey = field.getType().equals(Class.forName("java.util.List")) &&
-                        fieldInConfigValue.getClass().equals(Class.forName("java.util.Map")) &&
-                        ((Map<String, Object>) fieldInConfigValue).containsKey("comparison");
+                        withComparison;
 
                 boolean arrayContains = arrayWithComparisonKey &&
                         ((String) ((Map<String, Object>) fieldInConfigValue).get("comparison")).equals("contains");
@@ -61,15 +79,12 @@ public class BaseModel {
                 //-----------------------------------------------------
 
                 boolean isDate = field.getType().equals(Class.forName("java.time.LocalDateTime"));
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-                boolean isDateWithComparison = isDate &&
-                        fieldInConfigValue.getClass().equals(Class.forName("java.util.Map")) &&
-                        ((Map<String, Object>) fieldInConfigValue).containsKey("comparison");
+                boolean isDateWithComparison = isDate && withComparison;
                 // Check if field date is later
                 if (
                         isDateWithComparison &&
-                        ((String)(((Map<String, Object>) fieldInConfigValue).get("comparison"))).equals("later")
+                        ((String)(((Map<String, Object>) fieldInConfigValue).get("comparison"))).equals("later than")
                 ){
                     LocalDateTime fieldDate = (LocalDateTime)field.get(this);
                     LocalDateTime dateInConfig = (LocalDateTime)Serializer.parseValue(
@@ -85,7 +100,7 @@ public class BaseModel {
                 // Check if field date is before
                 if (
                         isDateWithComparison &&
-                        ((String)(((Map<String, Object>) fieldInConfigValue).get("comparison"))).equals("before")
+                        ((String)(((Map<String, Object>) fieldInConfigValue).get("comparison"))).equals("earlier that")
                 ){
                     LocalDateTime fieldDate = (LocalDateTime)field.get(this);
                     LocalDateTime dateInconfig = (LocalDateTime) Serializer.parseValue(
@@ -102,8 +117,7 @@ public class BaseModel {
                 //---------------------------------------------------------------
 
                 boolean stringContains = field.getType().equals(Class.forName("java.lang.String")) &&
-                        fieldInConfigValue.getClass().equals(Class.forName("java.util.Map")) &&
-                        ((Map<String, String>) fieldInConfigValue).containsKey("comparison") &&
+                        withComparison &&
                         ((Map<String, String>) fieldInConfigValue).get("comparison").equals("contains");
                 // Check if instance field as string contains value
                 if (stringContains) {
@@ -117,9 +131,7 @@ public class BaseModel {
                 }
                 //-----------------------------------------------------
 
-                boolean checkFieldIn = field.getType().equals(Class.forName("java.lang.String")) &&
-                        fieldInConfigValue.getClass().equals(Class.forName("java.util.Map")) &&
-                        ((Map<String, Object>) fieldInConfigValue).containsKey("comparison") &&
+                boolean checkFieldIn = withComparison &&
                         ((Map<String, Object>) fieldInConfigValue).get("comparison").equals("in");
                 // Check if instance field as string contains value
                 if (checkFieldIn) {
@@ -137,15 +149,19 @@ public class BaseModel {
                 // Simply compare Dates
                 if (isDate){
                     LocalDateTime fieldDate = (LocalDateTime)field.get(this);
-                    LocalDateTime dateInconfig = (LocalDateTime) Serializer.parseValue(
+                    LocalDateTime dateInConfig = (LocalDateTime) Serializer.parseValue(
                             field,
-                            (String)(((Map<String, Object>) fieldInConfigValue).get("value"))
+                            fieldInConfigValue
                     );
-                    if (!(fieldDate).isEqual(dateInconfig)){
+                    if (!(fieldDate).isEqual(dateInConfig)){
                         return false;
                     } else {
                         continue;
                     }
+                }
+
+                if (field.getType().equals(Long.class)){
+                    fieldInConfigValue = Long.parseLong(fieldInConfigValue.toString());
                 }
 
                 // Simply compare 2 values

@@ -2,7 +2,6 @@ package ObjectFactory;
 
 import Exceptions.ParseException;
 import Models.Tweet;
-import Models.User;
 
 import java.util.Map;
 

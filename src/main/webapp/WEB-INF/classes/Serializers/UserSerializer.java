@@ -3,8 +3,6 @@ package Serializers;
 import Models.User;
 import org.json.JSONObject;
 
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 public class UserSerializer extends Serializer {
     User user;

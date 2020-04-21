@@ -30,7 +30,7 @@ public class TweetManager extends Manager<Tweet>{
                             )
                     );
                 } catch (MultipleObjectsReturned | DoesNotExist multipleObjectsReturned) {
-                    multipleObjectsReturned.printStackTrace();
+                    System.out.println("EXCEPTION");
                 }
             }
         }, new TweetFactory());

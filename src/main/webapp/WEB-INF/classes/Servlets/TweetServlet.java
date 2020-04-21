@@ -3,8 +3,8 @@ package Servlets;
 import Exceptions.CreateObjectException;
 import Exceptions.DoesNotExist;
 import Exceptions.MultipleObjectsReturned;
+import Exceptions.ParseException;
 import Models.Tweet;
-import Serializers.TweetListSerializer;
 import Serializers.TweetSerializer;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
@@ -105,5 +105,32 @@ public class TweetServlet extends HttpServlet {
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType("application/json");
         response.getOutputStream().print(new TweetSerializer(updated_tweet).data().toString());
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String configStr = IOUtils.toString(request.getInputStream(), StandardCharsets.UTF_8);
+        JSONObject obj;
+        try {
+            obj = new JSONObject(configStr);
+        } catch (JSONException e){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+        Map<String, Object> config = obj.toMap();
+
+        Tweet createdTweet;
+        try {
+            createdTweet = Tweet.objects.create(config);
+        } catch (NoSuchFieldException | ClassNotFoundException | ParseException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+        response.setStatus(HttpServletResponse.SC_CREATED);
+        response.setContentType("application/json");
+
+        JSONObject serializedTweet = new TweetSerializer(createdTweet).data();
+
+        response.getOutputStream().print(serializedTweet.toString());
     }
 }

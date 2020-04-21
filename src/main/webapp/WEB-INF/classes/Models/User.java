@@ -1,5 +1,6 @@
 package Models;
 
+import Exceptions.DoesNotExist;
 import Managers.UserManager;
 
 import java.util.Map;
@@ -25,4 +26,21 @@ public class User extends BaseModel {
         this.photoPath = (String) rawUser.get("photoPath");
     }
 
+    public void save(){
+        try {
+            if (objects.replaceInCollection(this.id, this) == null){
+                throw new RuntimeException("Error while saving tweet");
+            }
+        } catch (DoesNotExist e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public void delete(){
+        try{
+            objects.delete(this.id);
+        } catch (DoesNotExist e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 }

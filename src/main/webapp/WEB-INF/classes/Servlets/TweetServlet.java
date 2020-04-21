@@ -5,6 +5,8 @@ import Exceptions.MultipleObjectsReturned;
 import Models.Tweet;
 import Serializers.TweetListSerializer;
 import Serializers.TweetSerializer;
+import org.apache.commons.io.IOUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -12,18 +14,26 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 public class TweetServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Long tweetId = Long.parseLong(request.getParameter("id"));
+        long tweetId;
+        try {
+            tweetId = Long.parseLong(request.getParameter("id"));
+        } catch (NumberFormatException e){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
         try {
             Tweet tweet = Tweet.objects.get(tweetId);
             JSONObject data = new TweetSerializer(tweet).data();
             String responseData = data.toString();
 
             response.setContentType("application/json");
+            response.setStatus(HttpServletResponse.SC_OK);
             response.getOutputStream().print(responseData);
 
         } catch (MultipleObjectsReturned e) {
@@ -38,22 +48,61 @@ public class TweetServlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        Long tweetId = Long.parseLong(request.getParameter("id"));
+        long tweetId;
+        try {
+            tweetId = Long.parseLong(request.getParameter("id"));
+        } catch (NumberFormatException e){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
         String responseData;
         try {
-            List<Tweet> deleted_tweets = Tweet.objects.delete(tweetId);
-            List<JSONObject> data = new TweetListSerializer(deleted_tweets).data();
-            if (data.size() == 1) {
-                responseData = data.get(0).toString();
-            } else {
-                responseData = data.toString();
-            }
+            Tweet deleted_tweet = Tweet.objects.delete(tweetId);
+            JSONObject data = new TweetSerializer(deleted_tweet).data();
+            responseData = data.toString();
         } catch (DoesNotExist e){
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             responseData = e.getMessage();
         }
 
         response.setContentType("application/json");
+        response.setStatus(HttpServletResponse.SC_OK);
         response.getOutputStream().print(responseData);
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        long tweetId;
+        try {
+            tweetId = Long.parseLong(request.getParameter("id"));
+        } catch (NumberFormatException e){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        String configStr = IOUtils.toString(request.getInputStream(), StandardCharsets.UTF_8);
+        JSONObject obj;
+        try {
+            obj = new JSONObject(configStr);
+        } catch (JSONException e){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+        Map<String, Object> config = obj.toMap();
+
+        Tweet updated_tweet;
+        try {
+            updated_tweet = Tweet.objects.update(tweetId, config);
+        } catch (DoesNotExist e){
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        } catch (IllegalAccessException | NoSuchFieldException e){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/json");
+        response.getOutputStream().print(new TweetSerializer(updated_tweet).data().toString());
     }
 }

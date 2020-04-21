@@ -5,9 +5,11 @@ import Exceptions.MultipleObjectsReturned;
 import Models.BaseModel;
 import Settings.Settings;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import ObjectFactory.ObjectFactory;
@@ -72,7 +74,18 @@ public class Manager<T extends BaseModel> {
         return instance;
     }
 
-    public T update(Long id, T object) throws DoesNotExist {
+    public T update(Long id, Map<String, Object> config) throws NoSuchFieldException, ClassCastException, IllegalAccessException, DoesNotExist {
+        int objectIndex = getObjectIndexById(id);
+        T object = collection.get(objectIndex);
+        Set<String> configKeys = config.keySet();
+        for (String key: configKeys){
+            Field objectField = object.getClass().getField(key);
+            objectField.set(this, objectField.getType().cast(config.get(key)));
+        }
+        return this.replaceInCollection(object.id, object);
+    }
+
+    public T replaceInCollection(Long id, T object) throws DoesNotExist {
         if (!id.equals(object.id)){
             return null;
         }

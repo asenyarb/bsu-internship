@@ -65,7 +65,9 @@ public class Tweet extends BaseModel implements Cloneable{
 
     public void save(){
         try {
-            objects.update(this.id, this);
+            if (objects.replaceInCollection(this.id, this) == null){
+                throw new RuntimeException("Error while saving tweet");
+            }
         } catch (DoesNotExist e){
             throw new RuntimeException(e.getMessage());
         }

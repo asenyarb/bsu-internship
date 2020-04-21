@@ -63,6 +63,22 @@ public class Tweet extends BaseModel implements Cloneable{
 
     }
 
+    public void save(){
+        try {
+            objects.update(this.id, this);
+        } catch (DoesNotExist e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public void delete(){
+        try{
+            objects.delete(this.id);
+        } catch (DoesNotExist e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
     private static Map<String, Object> handleUserFields(Map<String, Object> config) throws MultipleObjectsReturned, DoesNotExist {
         if (config.containsKey("user")) {
             Map<String, Object> userConfig = (Map<String, Object>) config.get("user");

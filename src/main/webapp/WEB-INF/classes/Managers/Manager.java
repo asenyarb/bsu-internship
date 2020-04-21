@@ -62,8 +62,39 @@ public class Manager<T extends BaseModel> {
         ).collect(Collectors.toList());
     }
 
-    public List<T> delete(Long id) throws DoesNotExist{
-        Map<String, Object> config = new HashMap<String, Object>(){{put("id", id);}};
+    public List<T> all(){
+        return collection;
+    }
+
+    public T create(Map<String, Object> rawObj){
+        T instance = (T)factory.create(rawObj);
+        collection.add(instance);
+        return instance;
+    }
+
+    public T update(Long id, T object) throws DoesNotExist {
+        if (!id.equals(object.id)){
+            return null;
+        }
+        int objectIndex = getObjectIndexById(id);
+        if (objectIndex == -1){
+            throw new DoesNotExist("Object matching query does not exist");
+        }
+        collection.set(objectIndex, object);
+        return object;
+    }
+
+    public T delete(Long objectId) throws DoesNotExist {
+        int objectIndex = getObjectIndexById(objectId);
+        if (objectIndex == -1) {
+            throw new DoesNotExist("Object matching query not found");
+        }
+        T deletedObject = collection.get(objectIndex);
+        collection.remove(objectIndex);
+        return deletedObject;
+    }
+
+    public List<T> delete(Map<String, Object> config) throws DoesNotExist{
         List<T> objectsToDelete = this.filter(config);
 
         if (objectsToDelete.size() == 0){
@@ -75,13 +106,12 @@ public class Manager<T extends BaseModel> {
         return objectsToDelete;
     }
 
-    public List<T> all(){
-        return collection;
-    }
-
-    public T create(Map<String, Object> rawObj){
-        T instance = (T)factory.create(rawObj);
-        collection.add(instance);
-        return instance;
+    private int getObjectIndexById(Long id){
+        for (int i = 0; i < collection.size(); ++i){
+            if (collection.get(i).id.equals(id)){
+                return i;
+            }
+        }
+        return -1;
     }
 }

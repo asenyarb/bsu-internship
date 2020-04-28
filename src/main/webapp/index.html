@@ -31,48 +31,23 @@
         </div>
     </header>
     <main>
-        <div class="make-new-post-area">
-            <form>
-                <div class="user-photo-column" id="user-photo-container">
-                </div>
-
-                <div class="container-column">
-                    <div class="post-text">
-                        <textarea class="new-post-textarea" placeholder="The text of your post..." maxlength="280"
-                            spellcheck="true"></textarea>
-                    </div>
-                    <div class="action-area">
-                        <div class="add-photo-area">
-                            <i class="fa fa-picture-o" style="color: gray" aria-hidden="true"></i>
-                        </div>
-                        <div class="add-new-post">
-                            <button class="add-post-btn">
-                                <strong>Add</strong>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
+        <div class="main-top">
+            <div class="user-photo-container" id="user-photo-container"></div>
+            <div class="filter-and-add-post">
+            <button class="filter-popup-on" onclick="switchFilter()">Filter</button>
+            <button class="add-post-btn" id="add-post-btn">Add post</button>
+            </div>
         </div>
-        <div class="filter-area">
+        <div class="filter-area" id="filter-area">
             <div class="filter-content">
-                <form>
-                    <fieldset>
-                        <legend><i class="fa fa-filter"></i>Filter</legend>
-                        <div class="filter-container">
-                            <textarea class="filter-textarea" placeholder=" @username"></textarea>
-                            <textarea class="filter-textarea" placeholder=" #tag"></textarea>
-                            <textarea class="filter-textarea" placeholder=" dd.mm.yyyy"></textarea>
-                            <button class="btn-apply"><i class="fa fa-check" aria-hidden="true"></i></button>
-                        </div>
-                    </fieldset>
+                <form id="filter-form" class="filter-form">
                 </form>
             </div>
         </div>
     <div  class="posts-container" id="posts-container"></div>
     <div class="load-more-posts">
-        <button class="load-more-btn"><strong><i class="fa fa-spinner fa-pulse fa-lg fa-fw"></i>
-                <span class="sr-only">Loading...</span> Load more</strong></button>
+        <button class="load-more-btn">Load more</button>
+        <!--<i class="fa fa-spinner fa-pulse fa-lg fa-fw"></i>-->
     </div>
     </main>
     <footer>
@@ -82,9 +57,13 @@
         </div>
     </footer>
 </body>
+<script src="resources/js/utils.js"></script>
 <script src="resources/js/posts.js"></script>
-<script src="resources/js/users(temporary).js"></script>
-<script src="resources/js/headerView.js"></script>
+<script src="resources/js/users.js"></script>
+<script src="resources/js/postConstructor.js"></script>
+<script src="resources/js/popups.js"></script>
+<script src="resources/js/pageService.js"></script>
+<script src="resources/js/controller.js"></script>
 <script src="resources/js/view.js"></script>
 <script src="resources/js/index.js"></script>
 

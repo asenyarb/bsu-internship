@@ -1,106 +1,34 @@
-function parseValue(value){
-    return value < 10 ? "0" + value : value;
-}
-
-function getLikeDiv(post, user){
-    if (!user) {
-        return '';
-    } else if (post.postLikes.find(username => user.userName === username)){
-        return `
-                <button class="like-btn">
-                    <img src="resources/img/red_heart.png"></img>
-                </button>
-        `;
-    } else {
-        return `
-                <button class="like-btn">
-                    <img src="resources/img/heart_regular.png"></img>
-                </button>
-        `;
-    }
-}
-
-function getEditDeleteDiv(post, user) {
-    if (!user || post.userName !== user.userName){
-        return '';
-    } else {
-        return `
-            <button class="edit-btn">
-                <img src="resources/img/edit_regular.png"></img>
-            </button>
-            <button class="trash-btn">
-                <img src="resources/img/trash.png"></img>
-            </button>
-        `
-    }
-}
-
-
-function getPostAsHTML(post, user){
-    const postDate = post.date;
-    console.log(post.date);
-    const date = parseValue(postDate.getHours()) + ":"
-        + parseValue(postDate.getMinutes()) + " " + parseValue(postDate.getDate())
-        + "." + parseValue(postDate.getMonth()) + "." + parseValue(postDate.getFullYear());
-
-    const like_div = getLikeDiv(post, user);
-    const edit_delete_div = getEditDeleteDiv(post, user);
-
-    return `
-                <div class="user-photo-column">
-                    <img class="user-photo" src="${post.userPhoto}">
-                </div>
-                <div class="container-column">
-                <div class="post-info">
-                    <div class="username-in-post">
-                        <h4 class="username">${post.userName}</h4>
-                    </div>
-                    <time class="date-and-time">
-                        <p>${date}</p>
-                    </time>
-                </div>
-                <div class="posts-text">
-                    <p>
-                        ${post.postText}
-                    </p>
-                </div>
-                <div class="action-area">
-                <div class="like-edit-panel">
-                ${edit_delete_div}${like_div}
-                </div>
-                </div>
-                </div>
-                `
-}
-
-function getPostAsDOMElement(post, user){
-    let postElement = document.createElement("article");
-
-    postElement.id = "post-" + post.id;
-    postElement.innerHTML = getPostAsHTML(post, user);
-    return postElement;
-}
-
 class PostsView{
     displayPosts(){
-        const user = window.users.getUser(window._username);
-        console.log(user);
         let el = document.getElementById("posts-container");
-        window.posts.getPage().forEach(
+        const posts = window.posts.getPage();
+        posts.forEach(
             post => {
-                const postElement = getPostAsDOMElement(post, user);
+                const postElement = window.postConstructor.getPostAsDOMElement(post, window._user);
                 el.append(postElement);
             }
         );
+        window._postsFrom += posts.length;
     }
 
     redisplay(){
         let el = document.getElementById("posts-container");
         el.innerHTML = "";
+        window._postsFrom = 0;
+        window._filterConfig = [];
         this.displayPosts();
     }
 
-    addPost(post){
+    addPost(text, tags, user){
+        const post = {
+            "postText": text,
+            "postTags": tags,
+            "userPhoto": user.userPhoto,
+            "userName": user.userName,
+            "postLikes": [],
+            "postPhotos": [],
+            "date": new Date()
+        }
         if (window.posts.add(post)) {
             // Should re-get posts as we need to resort them
             this.redisplay();
@@ -112,16 +40,25 @@ class PostsView{
     editPost(id, newPostFields){
         try {
             const post = window.posts.edit(id, newPostFields);
-            const user = window.users.getUser(window._username);
-            document.getElementById(`post-${id}`).innerHTML = getPostAsHTML(post, user);
+            const postElement = document.getElementById(`post-${id}`);
+            postElement.innerHTML = window.postConstructor.getPostAsHTML(post, window._user);
+            window.postConstructor.setPostEventListeners(postElement, post);
         } catch (e) {
             console.log(e);
         }
     }
 
     removePost(id){
-        window.posts.remove(id);
+        window.controller.delete(id);
         document.getElementById(`post-${id}`).remove();
+    }
+
+    like_pressed(postId){
+        const post = window.posts.get(postId);
+        window.controller.set_like(post, window._user.userName);
+        const el = document.getElementById(`post-${post.id}`);
+        el.innerHTML = window.postConstructor.getPostAsHTML(post, window._user);
+        window.postConstructor.setPostEventListeners(el, post);
     }
 }
 

@@ -1,9 +1,16 @@
 class PostCollection {
     _posts;
+    _lastId;
     static _standartPostFields = ['id', 'userPhoto', 'userName', 'date', 'postText', 'postPhotos', 'postTags', 'postLikes'];
 
     constructor(initialPosts = []) {
         this._posts = initialPosts;
+        this._lastId = 0;
+        initialPosts.forEach(post => {
+            if (post.id >= this._lastId){
+                this._lastId = post.id + 1;
+            }
+        })
     }
 
     _filterPostsBy(config) {
@@ -20,9 +27,9 @@ class PostCollection {
 
                 } else if (elementToFilter instanceof Date) {
                     if (configElement.comparison === 'before') {
-                        return elementToFilter < configElement.fieldValue;
+                        return elementToFilter <= configElement.fieldValue;
                     } else if (configElement.comparison === 'after') {
-                        return elementToFilter > configElement.fieldValue;
+                        return elementToFilter >= configElement.fieldValue;
                     }
                 } else {
                     return configElement.fieldValue.includes(elementToFilter);
@@ -39,10 +46,11 @@ class PostCollection {
         return postsToSort;
     }
 
-    getPage(skip = 0, top = 10, filterConfig = []) {
-        const filteredPosts = this._filterPostsBy(filterConfig);
-        const slicedPosts = filteredPosts.slice(skip, skip + top);
-        return this._sortByDate(slicedPosts);
+    getPage() {
+        const from = window._postsFrom;
+        const filteredPosts = this._filterPostsBy(window._filterConfig);
+        const sortedPosts = this._sortByDate(filteredPosts);
+        return sortedPosts.slice(from, from + 10);
     }
 
     get(id) {
@@ -83,33 +91,38 @@ class PostCollection {
     }
 
     add(post) {
+        if (!post){
+            return false;
+        }
+        if (!post.id){
+            post.id = this._lastId.toString();
+        } else if (post.id > this._lastId) {
+            this._lastId = post.id;
+        }
         if (PostCollection.validate(post)) {
             this._posts.push(post);
+            this._lastId += 1;
             return true;
         }
+        this.save();
         return false;
     }
 
     addAll(postsToAdd) {
-        const notAddedPosts = []
         postsToAdd.forEach(post => {
-            if (PostCollection.validate(post)) {
-                this._posts.push(post);
-            } else {
-                notAddedPosts.push(post);
-            }
-        })
-        return notAddedPosts;
+            this.add(post);
+        });
     }
 
     clear() {
         this._posts = [];
+        this.save();
     }
 
     edit(id, newPostFields) {
         const oldPost = this.get(id);
         const fieldsToChange = Object.keys(newPostFields);
-        const readOnlyFields = ['id', 'userName', 'date'];
+        const readOnlyFields = ['id', 'userName', 'date', 'likes'];
         fieldsToChange.forEach(field => {
             if (readOnlyFields.indexOf(field) === -1 || oldPost[field] === newPostFields[field]) {
                 oldPost[field] = newPostFields[field];
@@ -123,6 +136,7 @@ class PostCollection {
         } else {
             throw Error(`Unable to edit post fields with these values: ${newPostFields}`);
         }
+        this.save();
         return oldPost;
     }
 
@@ -138,7 +152,22 @@ class PostCollection {
             }
             return !equal;
         })
+        this.save();
         return (removedPostsNumber, removedPosts);
+    }
+
+    save(){
+        localStorage.removeItem("posts");
+        localStorage.setItem("posts", JSON.stringify(this._posts));
+    }
+
+    restore(){
+        const postsStr = localStorage.getItem("posts");
+        const posts = JSON.parse(postsStr);
+        posts.forEach(post => {
+            post.date = new Date(post.date);
+        })
+        this._posts = posts;
     }
 }
 

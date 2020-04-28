@@ -28,7 +28,7 @@ header{
     margin-left: auto;
 }
 .header-username{
-   color: black;
+    color: black;
     font-family: "Times New Roman", serif;
     font-style: italic;
     margin-top: 8px;
@@ -56,11 +56,28 @@ main {
     padding-top: 50px;
     width: 90%;
     overflow: hidden;
-
 }
-.new-post{
-    margin-top: auto;
-    margin-left: 3%;
+.main-top{
+    display: flex;
+}
+.user-photo-container{
+    max-height: 200px;
+    max-width: 200px;
+    margin-right: auto;
+}
+.filter-and-add-post{
+    max-width: 30%;
+    width: 30%;
+    display: flex;
+}
+.filter-popup-on, .add-post-btn{
+    border-radius: 20px;
+    color: white;
+    width: 100%;
+    margin: 2%;
+    border: none;
+    background: #72bb53;
+    font-size: 30px;
 }
 .make-new-post-area{
     background-color: white;
@@ -99,7 +116,7 @@ main {
     font-style: italic;
 }
 .add-new-post{
-    width: 8%;
+    width: 10%;
     margin-left: auto;
 }
 .action-area{
@@ -108,21 +125,29 @@ main {
 }
 .action-container{
     margin-left: auto;
-    display: flex;
 }
-.posts-text{
+.post-text{
     width: 85%;
     margin-top: -3%;
 }
-.add-post-btn, .load-more-btn{
+.post-tags-container{
+    margin-right: 3%;
+    display: flex;
+}
+.post-tags{
+    margin: auto;
+    align-items: center;
+    color: black;
+    font-family: "Times New Roman", serif;
+    font-style: italic;
+    font-weight: bold;
+}
+.load-more-btn{
     border-radius: 50px;
-    width: 100%;
     border: none;
     background-color: #72bb53;
     color: white;
     text-align: center;
-}
-.load-more-btn{
     width: 20%;
     margin-top: 20px;
     height: 2em;
@@ -135,6 +160,10 @@ main {
     width: 97%;
     border: 1px solid #92d36e;
     margin-top: 20px;
+    display: none;
+}
+.filter-area.enabled{
+    display: block;
 }
 fieldset{
     background-color: white;
@@ -150,21 +179,47 @@ fieldset{
 }
 .filter-container{
     padding-bottom: -10px;
-    display: none;
+}
+.filter-form{
+    margin: 2%;
+    display: flex;
+    font-size: 30px;
+}
+.filter-fields{
+    margin-bottom: auto;
+    vertical-align: center;
+    width: 80%;
+}
+.filter-formset{
+    margin: 2%;
+    width: 100%;
+    display: flex;
 }
 .filter-textarea{
+    margin: auto;
+    vertical-align: center;
     resize: none;
     overflow: hidden;
     background-color: white;
     outline: none;
-    width: 30%;
+    width: 40%;
     border: 1px solid lightgray;
     color: gray;
     font-family: "Arial", serif;
     font-style: italic;
     border-radius: 5px;
-    height: 15px;
-    margin-right: 15px;
+    font-size: 20px;
+}
+.filter-submit{
+    margin: auto;
+    vertical-align: center;
+    background: #92d36e;
+    border-radius: 5px;
+    width: 20%;
+    height: 40px;
+    border: none;
+    color: white;
+    font-size: 30px;
 }
 article {
     margin-top: 20px;
@@ -189,11 +244,14 @@ article {
     color: black;
     font-style: italic;
 }
-.like-edit-panel{
-    margin-left: auto;
-}
 .username-in-post{
     margin-top: -1%;
+}
+.action-area-btn{
+    display: inline-block;
+}
+.like{
+    margin-left: auto;
 }
 .like-btn, .edit-btn, .trash-btn, .change-post-btn, .delete-post-btn, .log-out-btn, .btn-apply{
     background: white;
@@ -215,6 +273,135 @@ footer{
     text-align: center;
     color: gray;
     border-top: 1px darkgray solid;
+}
+.popup-container {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+}
+.popup {
+    background: white;
+    border-radius: 10px;
+    font-size: 30px;
+    width: 60%;
+}
+.popup-exit{
+    display: flex;
+    justify-content: end;
+}
+.popup-exit-btn{
+    margin-left: auto;
+    margin-right: 3%;
+    margin-top: 3%;
+}
+.popup-label{
+    display: flex;
+    justify-content: center;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+.popup-submit{
+    display: flex;
+    justify-content: center;
+    height: 15%;
+    margin-bottom: 10%;
+    margin-top: 10%
+}
+.popup-submit-btn{
+    background: #72bb53;
+    width: 50%;
+    height: 100%;
+    color: white;
+    font-size: 25px;
+    border-radius: 5px;
+    border: none;
+    display: flex;
+    justify-content: center;
+    vertical-align: middle;
+}
+.popup-submit-btn-label{
+    margin: auto;
+    text-align: center;
+}
+.popup-edit{
+    height: 80%;
+    width: 80%;
+    display: flex;
+    justify-content: space-around;
+}
+.popup-post-column-left{
+    margin-top: 2%;
+    width: 40%;
+}
+.popup-post-column-right{
+    margin-top: 2%;
+    width: 40%;
+}
+.popup-post-text-container-left{
+    margin-top: 4%;
+    height: 80%;
+}
+.popup-post-text-container-right{
+    margin-top: 4%;
+    height: 40%;
+    display: flex;
+    align-items: stretch;
+}
+.popup-post-textarea{
+    outline: none;
+    resize: none;
+    overflow: hidden;
+    width: 90%;
+    height: 90%;
+}
+.popup-login{
+    height: auto;
+}
+.login-warning{
+    display: none;
+    color: white;
+    background: red;
+    opacity: 0.7;
+    height: 10%;
+    justify-content: center;
+    text-align: center;
+}
+.login-warning.show{
+    display: flex;
+}
+.login-user-form{
+    display: flex;
+    justify-content: center;
+}
+.login-user-container{
+    width: 70%;
+}
+.login-text-container{
+    display: flex;
+    margin-top: 10%;
+}
+.login-user-label{
+    width: 40%;
+}
+.login-username-textarea, .login-password-textarea{
+    margin-left: 7%;
+    overflow: hidden;
+    background-color: white;
+    outline: none;
+    border: 1px solid lightgray;
+    color: gray;
+    font-family: "Arial", serif;
+    font-style: italic;
+    border-radius: 5px;
+    resize: none;
+    font-size: 20px;
 }
 @media only screen and (max-width: 1000px) {
     .column-1, .column-2{

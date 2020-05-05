@@ -96,20 +96,6 @@ public class Tweet extends BaseModel implements Cloneable{
         this.createdAt = LocalDateTime.now().withNano(0);
     }
 
-    public Boolean matches(Map<String, Object> config) throws NoSuchFieldException, IllegalAccessException {
-        try {
-            Map<String, Object> newConfig = handleUserFields(config);
-            try {
-                return super.matches(newConfig);
-            } catch (ClassNotFoundException e){
-                return false;
-            }
-        } catch (MultipleObjectsReturned | DoesNotExist e){
-            return false;
-        }
-
-    }
-
     public void save(){
         try {
             if (objects.replaceInCollection(this.id, this) == null){
@@ -128,7 +114,7 @@ public class Tweet extends BaseModel implements Cloneable{
         }
     }
 
-    private static Map<String, Object> handleUserFields(Map<String, Object> config) throws MultipleObjectsReturned, DoesNotExist {
+    public static Map<String, Object> handleUserFields(Map<String, Object> config) throws MultipleObjectsReturned, DoesNotExist {
         if (config.containsKey("user")) {
             Map<String, Object> userConfig = (Map<String, Object>) config.get("user");
 

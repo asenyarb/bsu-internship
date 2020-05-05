@@ -96,9 +96,11 @@ public class TweetServlet extends HttpServlet {
             updated_tweet = Tweet.objects.update(tweetId, config);
         } catch (DoesNotExist e){
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.getOutputStream().print(e.getMessage());
             return;
         } catch (IllegalAccessException | NoSuchFieldException | CreateObjectException e){
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getOutputStream().print(e.getMessage());
             return;
         }
 
@@ -122,7 +124,7 @@ public class TweetServlet extends HttpServlet {
         Tweet createdTweet;
         try {
             createdTweet = Tweet.objects.create(config);
-        } catch (NoSuchFieldException | ClassNotFoundException | ParseException e) {
+        } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }

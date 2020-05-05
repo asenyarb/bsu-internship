@@ -123,6 +123,7 @@ class PostCollection {
         } else {
             throw Error(`Unable to edit post fields with these values: ${newPostFields}`);
         }
+        return oldPost;
     }
 
     remove(id) {

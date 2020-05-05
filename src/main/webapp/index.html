@@ -19,31 +19,21 @@
                     </a>
                 </div>
                 <div>
-                    <h3 class="header-username">@asenyarb </h3>
+                    <h3 class="header-username" id="header-username"></h3>
                 </div>
             </div>
             <div class="right-block">
-                <div class="header-search">
-                    <input class="search" type="search" placeholder=" #tags...">
-                </div>
-                <div class="new-post">
-                    <a href="#" class="new-post" title="New post">
-                        <img class="header-icons" src="resources/img/add-post.png" title="Profile" alt="Add new post">
-                    </a>
-                </div>
                 <div class="log-out">
-                    <button class="log-out-btn">
-                        <img class="header-icons" src="resources/img/log-out.png" title="Log out" alt="Log out">
+                    <button class="log-out-btn" id="log-out-btn">
                     </button>
                 </div>
             </div>
         </div>
     </header>
-    <main class="posts-container">
+    <main>
         <div class="make-new-post-area">
             <form>
-                <div class="user-photo-column">
-                    <img class="user-photo" src="resources/img/user-photo.jpg" alt="User photo">
+                <div class="user-photo-column" id="user-photo-container">
                 </div>
 
                 <div class="container-column">
@@ -79,372 +69,11 @@
                 </form>
             </div>
         </div>
-        <article class="user-post">
-            <div class="user-photo-column">
-                <img class="user-photo" src="resources/img/user-photo.jpg" alt="User photo">
-            </div>
-            <div class="container-column">
-                <div class="post-info">
-                    <div class="username-in-post">
-                        <h4 class="username">@asenyarb</h4>
-                    </div>
-                    <time class="date-and-time">
-                        <p>14:45 01.03.20</p>
-                    </time>
-                </div>
-                <div class="posts-text">
-                    <p>
-                        Nabi Tajima was until recently the oldest person in the world. She was born in August 1900,
-                        which made her the last person born in the 19th century.
-                        She passed away in a hospital in southern Japan at the age of 117.
-                        She had more than 160 descendants, including great-great-great grandchildren.
-                        Mrs Tajima was the 3rd oldest person in recorded human history.<br>
-                        #interesting #Japan
-                    </p>
-                </div>
-                <div class="action-area">
-                    <div class="action-container">
-                        <div class="like">
-                            <button class="like-btn">
-                                <i class="fa fa-heart-o fa-lg"></i>
-                            </button>
-                        </div>
-                        <div class="change-post">
-                            <button class="change-post-btn">
-                                <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
-                            </button>
-                        </div>
-                        <div class="delete-post">
-                            <button class="delete-post-btn">
-                                <i class="fa fa-trash fa-lg"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </article>
-        <article class="other-post">
-            <div class="user-photo-column">
-                <img class="user-photo" src="resources/img/planet.jpg" alt="User photo">
-            </div>
-            <div class="container-column">
-                <div class="post-info">
-                    <div class="username-in-post">
-                        <h4 class="username">@milky_way</h4>
-                    </div>
-                    <time class="date-and-time">
-                        <p>11:00 29.02.20</p>
-                    </time>
-                </div>
-                <div class="posts-text">
-                    <p>
-                        Two Australian police officers were out in the ocean, and they were conducting safety and
-                        compliance checks when a great white shark suddenly swam up to their small boat.
-                        Luckily, the heart-stopping meeting ended quickly when the shark swam away.<br>
-                        #shark
-                    </p>
-                </div>
-                <div class="action-area">
-                    <div class="like">
-                        <button class="like-btn">
-                            <i class="fa fa-heart-o fa-lg"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </article>
-        <article class="other-post">
-            <div class="user-photo-column">
-                <img class="user-photo" src="resources/img/comp.jpg" alt="User photo">
-            </div>
-            <div class="container-column">
-                <div class="post-info">
-                    <div class="username-in-post">
-                        <h4 class="username">@prog_mid</h4>
-                    </div>
-                    <time class="date-and-time">
-                        <p>6:36 27.02.20</p>
-                    </time>
-                </div>
-                <div class="posts-text">
-                    <p>
-                        More than 71 people are dead, 17 missing, and more than 40,000 were displaced after a massive
-                        storm struck the Philippines. One of the country’s officials said that the storm was not
-                        strong enough to be rated as a typhoon, so many people were unprepared.
-                        Dozens of them died in landslides and flooding caused by the heavy rains.
-                        The country already suffered a number of deadly storms recently – Super
-                        Typhoon Mangkhut killed more than 80 people in September and Typhoon Yutu killed 17 more.<br>
-                        #typhoon
-                    </p>
-                </div>
-                <div class="action-area">
-                    <div class="like">
-                        <button class="like-btn">
-                            <i class="fa fa-heart-o fa-lg"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </article>
-        <article class="user-post">
-            <div class="user-photo-column">
-                <img class="user-photo" src="resources/img/user-photo.jpg" alt="User photo">
-            </div>
-            <div class="container-column">
-                <div class="post-info">
-                    <div class="username-in-post">
-                        <h4 class="username">@asenyarb</h4>
-                    </div>
-                    <time class="date-and-time">
-                        <p>17:30 25.02.20</p>
-                    </time>
-                </div>
-                <div class="posts-text">
-                    <p>
-                        In recent years, Australia’s south west state of Victoria saw a rapid increase of koalas,
-                        meaning that the animals have been literally eating themselves out of house and home by
-                        destroying gum trees. Their binging and booming population eventually caused them to starve.
-                        Environmentalists have moved 500 koalas over the past year, and their objective now is to
-                        control them and keep their numbers down. They gave the females contraceptive implants and then
-                        released them into other forests.<br>
-                        #Australia #koalas
-                    </p>
-                </div>
-                <div class="action-area">
-                    <div class="action-container">
-                        <div class="like">
-                            <button class="like-btn">
-                                <i class="fa fa-heart-o fa-lg"></i>
-                            </button>
-                        </div>
-                        <div class="change-post">
-                            <button class="change-post-btn">
-                                <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
-                            </button>
-                        </div>
-                        <div class="delete-post">
-                            <button class="delete-post-btn">
-                                <i class="fa fa-trash fa-lg"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </article>
-        <article class="other-post">
-            <div class="user-photo-column">
-                <img class="user-photo" src="resources/img/comp.jpg" alt="User photo">
-            </div>
-            <div class="container-column">
-                <div class="post-info">
-                    <div class="username-in-post">
-                        <h4 class="username">@prog_mid</h4>
-                    </div>
-                    <time class="date-and-time">
-                        <p>5:56 20.02.20</p>
-                    </time>
-                </div>
-                <div class="posts-text">
-                    <p>
-                        One farmer from Kansas, USA decided to create cow art. He used his cattle,
-                        a feed truck and drones to create a huge smiley face out of cows.
-                        If that is not enough to make you smile, the farmer and artist is also known for
-                        using his trombone to herd the cows, saying that they have happy cows in Kansas.<br>
-                        #cow #art
-                    </p>
-                </div>
-                <div class="action-area">
-                    <div class="like">
-                        <button class="like-btn">
-                            <i class="fa fa-heart-o fa-lg"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </article>
-        <article class="user-post">
-            <div class="user-photo-column">
-                <img class="user-photo" src="resources/img/user-photo.jpg" alt="User photo">
-            </div>
-            <div class="container-column">
-                <div class="post-info">
-                    <div class="username-in-post">
-                        <h4 class="username">@asenyarb</h4>
-                    </div>
-                    <time class="date-and-time">
-                        <p>7:30 15.02.20</p>
-                    </time>
-                </div>
-                <div class="posts-text">
-                    <p>
-                        Amazon is working on rules about technology which can recognize a person’s face. Amazon’s CEO,
-                        Jeff Bezos, says that his team is working on these rules that he wants to present to Congress.
-                        Bezos believes that facial recognition has many benefits, but there is also danger that it
-                        can be abused.<br>
-                        #Amazon #facial_recognition
-                    </p>
-                </div>
-                <div class="action-area">
-                    <div class="action-container">
-                        <div class="like">
-                            <button class="like-btn">
-                                <i class="fa fa-heart-o fa-lg"></i>
-                            </button>
-                        </div>
-                        <div class="change-post">
-                            <button class="change-post-btn">
-                                <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
-                            </button>
-                        </div>
-                        <div class="delete-post">
-                            <button class="delete-post-btn">
-                                <i class="fa fa-trash fa-lg"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </article>
-        <article class="other-post">
-            <div class="user-photo-column">
-                <img class="user-photo" src="resources/img/planet.jpg" alt="User photo">
-            </div>
-            <div class="container-column">
-                <div class="post-info">
-                    <div class="username-in-post">
-                        <h4 class="username">@milky_way</h4>
-                    </div>
-                    <time class="date-and-time">
-                        <p>21:21 10.02.20</p>
-                    </time>
-                </div>
-                <div class="posts-text">
-                    <p>
-                        We’ve all heard the saying ‘painting on a smile’. Well one Japanese artist has taken
-                        that phrase to a whole new level. Nobumichi Asai has found a way to project and map
-                        expressions onto people’s faces, effectively creating a facial mask. He and his team
-                        displayed their three-dimensional facial projection mapping system to a select group of
-                        spectators in Tokyo.!<br>
-                        #Japan
-                    </p>
-                </div>
-                <div class="action-area">
-                    <div class="like">
-                        <button class="like-btn">
-                            <i class="fa fa-heart-o fa-lg"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </article>
-        <article class="user-post">
-            <div class="user-photo-column">
-                <img class="user-photo" src="resources/img/user-photo.jpg" alt="User photo">
-            </div>
-            <div class="container-column">
-                <div class="post-info">
-                    <div class="username-in-post">
-                        <h4 class="username">@asenyarb</h4>
-                    </div>
-                    <time class="date-and-time">
-                        <p>5:30 05.02.20</p>
-                    </time>
-                </div>
-                <div class="posts-text">
-                    <p>
-                        At the 2018 Winter Olympics, the competition and the entertainment was heating up! Some
-                        fire artists held a special show on a beach of a coastal city that is helping with the
-                        Pyeongchang Games in South Korea.
-                        Visitors braved the cold outside to watch the sparks fly in the show. The fire artists
-                        came with other artists to celebrate the Olympics.<br>
-                        #South_Korea #Olympics
-                    </p>
-                </div>
-                <div class="action-area">
-                    <div class="action-container">
-                        <div class="like">
-                            <button class="like-btn">
-                                <i class="fa fa-heart-o fa-lg"></i>
-                            </button>
-                        </div>
-                        <div class="change-post">
-                            <button class="change-post-btn">
-                                <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
-                            </button>
-                        </div>
-                        <div class="delete-post">
-                            <button class="delete-post-btn">
-                                <i class="fa fa-trash fa-lg"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </article>
-        <article class="other-post">
-            <div class="user-photo-column">
-                <img class="user-photo" src="resources/img/planet.jpg" alt="User photo">
-            </div>
-            <div class="container-column">
-                <div class="post-info">
-                    <div class="username-in-post">
-                        <h4 class="username">@milky_way</h4>
-                    </div>
-                    <time class="date-and-time">
-                        <p>14:00 07.02.20</p>
-                    </time>
-                </div>
-                <div class="posts-text">
-                    <p>
-                        Maria Sharapova is a tennis player. She comes from Russia. She wins an important match with
-                        the best tennis player in the world. That player is Serena Williams.
-                        Sharapova becomes very famous after this match. She is only 17 years old.<br>
-                        #tennis
-                    </p>
-                </div>
-                <div class="action-area">
-                    <div class="like">
-                        <button class="like-btn">
-                            <i class="fa fa-heart-o fa-lg"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </article>
-        <article class="other-post">
-            <div class="user-photo-column">
-                <img class="user-photo" src="resources/img/comp.jpg" alt="User photo">
-            </div>
-            <div class="container-column">
-                <div class="post-info">
-                    <div class="username-in-post">
-                        <h4 class="username">@prog_mid</h4>
-                    </div>
-                    <time class="date-and-time">
-                        <p>1:29 01.02.20</p>
-                    </time>
-                </div>
-                <div class="posts-text">
-                    <p>
-                        Malcolm X is a famous US civil rights leader. 55 years ago, someone shoots him in New
-                        York City, USA. Malcolm X is born Malcolm Little in 1925. He changes his name after he
-                        changes his religion to Islam.<br>
-                        #NY
-                    </p>
-                </div>
-                <div class="action-area">
-                    <div class="like">
-                        <button class="like-btn">
-                            <i class="fa fa-heart-o fa-lg"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </article>
-        <div class="load-more-posts">
-            <button class="load-more-btn"><strong><i class="fa fa-spinner fa-pulse fa-lg fa-fw"></i>
-                    <span class="sr-only">Loading...</span> Load more</strong></button>
-        </div>
+    <div  class="posts-container" id="posts-container"></div>
+    <div class="load-more-posts">
+        <button class="load-more-btn"><strong><i class="fa fa-spinner fa-pulse fa-lg fa-fw"></i>
+                <span class="sr-only">Loading...</span> Load more</strong></button>
+    </div>
     </main>
     <footer>
         <div class="footer-content">
@@ -454,6 +83,9 @@
     </footer>
 </body>
 <script src="resources/js/posts.js"></script>
+<script src="resources/js/users(temporary).js"></script>
+<script src="resources/js/headerView.js"></script>
+<script src="resources/js/view.js"></script>
 <script src="resources/js/index.js"></script>
 
 </html>

@@ -1,0 +1,1 @@
+select count(*)  'n of posts made 1 march', u.NAME from posts p join users u on p.USER_ID = u.USER_ID where (DAY(CREATED_AT) = 1 and MONTH(CREATED_AT) = 3) group by p.USER_ID;

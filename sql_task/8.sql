@@ -1,0 +1,1 @@
+select u.NAME from posts p join users u on p.USER_ID = u.USER_ID where DATE(CREATED_AT) = DATE(CURRENT_TIMESTAMP) group by p.USER_ID having count(*) > 3;

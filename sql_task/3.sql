@@ -1,0 +1,1 @@
+select * from posts where USER_ID = 2 and (DESCRIPTION LIKE '% hello %' or DESCRIPTION LIKE '% hello%');

@@ -49,8 +49,12 @@ class PostCollection {
     getPage() {
         const from = window._postsFrom;
         const filteredPosts = this._filterPostsBy(window._filterConfig);
-        const sortedPosts = this._sortByDate(filteredPosts);
-        return sortedPosts.slice(from, from + 10);
+        if (filteredPosts) {
+            const sortedPosts = this._sortByDate(filteredPosts);
+            return sortedPosts.slice(from, from + 10);
+        } else {
+            return [];
+        }
     }
 
     get(id) {
@@ -164,7 +168,7 @@ class PostCollection {
     restore(){
         const postsStr = localStorage.getItem("posts");
         const posts = JSON.parse(postsStr);
-        posts.forEach(post => {
+        posts && posts.forEach(post => {
             post.date = new Date(post.date);
         })
         this._posts = posts;

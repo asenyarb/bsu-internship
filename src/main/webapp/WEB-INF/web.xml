@@ -6,11 +6,11 @@
   <display-name>Archetype Created Web Application</display-name>
   <servlet>
     <servlet-name>tweet</servlet-name>
-    <servlet-class>Servlets.TweetServlet</servlet-class>
+    <servlet-class>com.servlet.Servlets.TweetServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>tweets</servlet-name>
-    <servlet-class>Servlets.TweetListServlet</servlet-class>
+    <servlet-class>com.servlet.Servlets.TweetListServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>indexPage</servlet-name>
@@ -18,7 +18,7 @@
   </servlet>
   <servlet>
     <servlet-name>uploadFile</servlet-name>
-    <servlet-class>Servlets.FileUploadServlet</servlet-class>
+    <servlet-class>com.servlet.Servlets.FileUploadServlet</servlet-class>
   </servlet>
   
   <servlet-mapping>
@@ -57,7 +57,7 @@
 
   <filter>
     <filter-name>ServerFilter</filter-name>
-    <filter-class>Servlets.FilterServlet</filter-class>
+    <filter-class>com.servlet.Servlets.FilterServlet</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>ServerFilter</filter-name>

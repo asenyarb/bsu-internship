@@ -1,0 +1,1 @@
+select datediff(CURRENT_TIMESTAMP, CREATED_AT) 'days from first post publication' from posts order by CREATED_AT limit 1;

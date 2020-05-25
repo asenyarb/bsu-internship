@@ -1,0 +1,1 @@
+select u.USER_ID, u.NAME, u.PHOTO_LINK from users u join posts p on u.USER_ID = p.USER_ID group by NAME having count(*) > 3;

@@ -171,7 +171,7 @@ class PostCollection {
         posts && posts.forEach(post => {
             post.date = new Date(post.date);
         })
-        this._posts = posts;
+        this._posts = posts ? posts : [];
     }
 }
 

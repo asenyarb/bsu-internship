@@ -15,7 +15,7 @@ class PostsView{
         let el = document.getElementById("posts-container");
         el.innerHTML = "";
         window._postsFrom = 0;
-        window._filterConfig = [];
+        //window._filterConfig = [];
         this.displayPosts();
     }
 
